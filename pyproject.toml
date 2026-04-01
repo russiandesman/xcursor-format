@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "xcursor-format"
+dynamic = ["version"]  # Version comes from Git tags
+description = "Library and CLI tool for Xcursor files"
+readme = "README.md"
+authors = [{name = "Your Name", email = "you@example.com"}]
+license = {text = "MIT"}
+requires-python = ">=3.7"
+
+[project.scripts]
+xcur2png = "xcur2png:main"
+
+[tool.setuptools.py-modules]
+py-modules = ["xcursor_format", "xcur2png"]
+
+[project.dependencies]
+Pillow = "^10.0"
+
