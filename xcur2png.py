@@ -3,7 +3,6 @@
 """drop-in replacement for xcur2png (https://github.com/eworm-de/xcur2png)"""
 
 import argparse
-import struct
 from pathlib import Path
 from PIL import Image
 

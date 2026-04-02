@@ -64,7 +64,7 @@ def main():
     cfg = ConfigParser()
     cfg.read(output_dir / "index.theme")
     lh_theme = f"[LeftHanded] {cfg['Icon Theme']['name']}"
-    cfg['Icon Theme']['Name'] = lh_theme
+    cfg['Icon Theme']['name'] = lh_theme
     with open(output_dir / "index.theme", "w") as f:
         cfg.write(f, space_around_delimiters=False)
 

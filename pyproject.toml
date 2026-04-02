@@ -4,19 +4,18 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "xcursor-format"
-dynamic = ["version"]  # Version comes from Git tags
+dynamic = ["version"]
 description = "Library and CLI tool for Xcursor files"
 readme = "README.md"
-authors = [{name = "Your Name", email = "you@example.com"}]
+authors = [{name = "russiandesman", email = "des.maryin@googlemail.com"}]
 license = {text = "MIT"}
-requires-python = ">=3.7"
+requires-python = ">=3.10"
+dependencies = ["Pillow>=10"]
 
 [project.scripts]
 xcur2png = "xcur2png:main"
+xcursor_theme_leftifier = "xcursor_theme_leftifier:main"
 
-[tool.setuptools.py-modules]
-py-modules = ["xcursor_format", "xcur2png"]
-
-[project.dependencies]
-Pillow = "^10.0"
+[tool.setuptools]
+py-modules = ["xcursor_format", "xcur2png", "xcursor_theme_leftifier"]
 
