@@ -159,6 +159,10 @@ class XCursor:
             if isinstance(chunk.body, XCursorChunkImage):
                 yield chunk
 
+    @property
+    def largest_image(self):
+        return max(self.images, key=lambda chunk: chunk.body.width)
+
     def flip(self):
         def flip_horizontal(pixels: tuple[int, ...], width: int):
             for i in range(0, len(pixels), width):
