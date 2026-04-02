@@ -2,8 +2,8 @@ from dataclasses import dataclass, astuple
 import struct
 
 class XCursorBase:
-    @staticmethod
-    def raw_unpack(data: bytes, offset: int, fmt: str):
+    @classmethod
+    def raw_unpack(cls, data: bytes, offset: int, fmt: str):
         required_size = struct.calcsize(fmt)
         available_size = len(data) - offset
         if available_size < required_size:
@@ -76,7 +76,7 @@ class XCursorChunkComment(XCursorBase):
     @classmethod
     def unpack(cls, data: bytes, offset: int):
         instance, new_offset = super().unpack(data, offset)
-        string_bytes, new_offset = super().raw_unpack(data, new_offset, f"{instance.str_len}s")
+        string_bytes, new_offset = cls.raw_unpack(data, new_offset, f"{instance.str_len}s")
         instance.string = string_bytes.decode('utf-8')
         return instance, new_offset
 
@@ -84,7 +84,7 @@ class XCursorChunkComment(XCursorBase):
         return f"[len={self.str_len}, s='{self.string}']"
 
     def serialize(self):
-        return struct.pack(self.FMT + f"{self.str_len}s", *astuple(self))
+        return struct.pack(self.FMT + f"{self.str_len}s", self.str_len, self.string.encode('utf-8'))
 
 
 @dataclass
@@ -100,7 +100,7 @@ class XCursorChunkImage(XCursorBase):
     @classmethod
     def unpack(cls, data: bytes, offset: int):
         instance, new_offset = super().unpack(data, offset)
-        instance.pixels, new_offset = super().raw_unpack(data, new_offset, f"{instance.width * instance.height}I")
+        instance.pixels, new_offset = cls.raw_unpack(data, new_offset, f"{instance.width * instance.height}I")
         return instance, new_offset
 
     def __repr__(self):
@@ -123,7 +123,7 @@ class XCursorChunk:
         elif header.type == XCursorChunkHdr.IMAGE:
             body, _ = XCursorChunkImage.unpack(data, body_offset)
         else:
-            raise ValueError(f"Unknown chunk type: {chunk.type:#x}")
+            raise ValueError(f"Unknown chunk type: {header.type:#x}")
 
         return cls(header, body)
 
