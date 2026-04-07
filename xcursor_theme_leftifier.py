@@ -20,6 +20,11 @@ NEVER_MIRROR = {
     "left_tee", "right_tee",
     "ul_angle", "ur_angle", "ll_angle", "lr_angle",
     "right_ptr",
+    "bottom_left_corner", "top_left_corner", "top_right_corner", "bottom_right_corner",
+    "left_side", "left_tee",
+    "right_side", "right_tee",
+    "top_side", "top_tee",
+    "bottom_side", "bottom_tee",
 }
 
 def should_mirror(name: str, xcursor: XCursor, user_list: set | None) -> bool:
