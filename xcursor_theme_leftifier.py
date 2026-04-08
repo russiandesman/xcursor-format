@@ -55,7 +55,7 @@ def build_reverse_symlink_map(cursors_dir: Path) -> dict[Path, set[str]]:
                 target = path.resolve()
                 if target not in file_to_symlinks:
                     file_to_symlinks[target] = set()
-                file_to_symlinks[target].add(path.stem)
+                file_to_symlinks[target].add(path.name)
             except (OSError, RuntimeError):
                 # Broken symlink, skip
                 pass
@@ -109,32 +109,29 @@ def main():
         print("  NEVER_MIRROR takes precedence. Use --files to override.")
         print()
 
-    for path in cursors_dir.iterdir():
-        if path.is_file() and not path.is_symlink():
-            name = path.stem
-            symlink_names = file_to_symlinks.get(path, set())
-            all_names = {name} | symlink_names
+    paths = sorted(p for p in cursors_dir.iterdir() if p.is_file() and not p.is_symlink())
+    for path in paths:
+        name = path.name
+        symlink_names = file_to_symlinks.get(path.resolve(), set())
+        all_names = {name} | symlink_names
+        aka_string = ', '.join(sorted(symlink_names))
+        try:
+            xcursor = XCursor(path.read_bytes())
+            if should_mirror_by_names(all_names, xcursor, args.files):
+                xcursor.flip()
+                path.write_bytes(xcursor.serialize())
+                print("flip: ", end="")
+            else:
+                print("skip: ", end="")
+        except Exception as e:
+            print("unkn: ", end="")
 
-            print(f"Processing {path.name}", end="")
-            if symlink_names:
-                print(f" (also: {', '.join(sorted(symlink_names))})", end="")
-            print()
-
-            try:
-                xcursor = XCursor(path.read_bytes())
-                if should_mirror_by_names(all_names, xcursor, args.files):
-                    xcursor.flip()
-                    path.write_bytes(xcursor.serialize())
-                    print("Flipped")
-                else:
-                    print("Skipped")
-            except Exception as e:
-                print("Irrelevant")
+        print(f"{name} aka: {aka_string}" if aka_string else name)
 
     cfg = ConfigParser()
     cfg.read(output_dir / "index.theme")
-    lh_theme = f"[LeftHanded] {cfg['Icon Theme']['name']}"
-    cfg['Icon Theme']['name'] = lh_theme
+    theme_name = cfg.get("Icon Theme", "name", fallback=input_dir.name)
+    cfg['Icon Theme'] = {'name': f"LeftHanded {theme_name}"}
     with open(output_dir / "index.theme", "w") as f:
         cfg.write(f, space_around_delimiters=False)
 
