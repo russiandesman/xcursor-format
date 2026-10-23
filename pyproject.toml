@@ -16,6 +16,10 @@ dependencies = ["Pillow>=10"]
 xcur2png = "xcur2png:main"
 xcursor_theme_leftifier = "xcursor_theme_leftifier:main"
 
+[project.urls]
+Homepage = "https://github.com/russiandesman/xcursor-format"
+"Bug Tracker" = "https://github.com/russiandesman/xcursor-format/issues"
+
 [tool.setuptools]
 py-modules = ["xcursor_format", "xcur2png", "xcursor_theme_leftifier"]
 

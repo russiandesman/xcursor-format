@@ -2,6 +2,8 @@
 
 Library to work with XCursor files
 
+[Sources](https://github.com/russiandesman/xcursor-format)
+
 # xcursor_theme_leftifier
 
 Take cursor theme you like (look at /usr/share/icons/), make it left hand friendly.
@@ -20,7 +22,7 @@ xcursor_theme_leftifier.py --input=/usr/share/icons/DMZ-Black --output=test --fi
 
 # xcur2png
 
-Drop-in replacement for great and misterious xcur2png (https://github.com/eworm-de/xcur2png)
+Drop-in replacement for great and misterious [xcur2png](https://github.com/eworm-de/xcur2png)
 
 Usage:
 
